@@ -1,85 +1,105 @@
+const themeToggle = document.getElementById("theme-toggle");
+const demoQuestion = document.getElementById("demo-question");
+const demoOptions = document.getElementById("demo-options");
+const demoExplanation = document.getElementById("demo-explanation");
+const demoNext = document.getElementById("demo-next");
+const demoProgress = document.getElementById("demo-progress");
+const demoDifficulty = document.getElementById("demo-difficulty");
+const optionLabels = ["A", "B", "C", "D"];
+let currentIndex = 0;
 
-// Variables to track state
-let currentQuestionIndex = 0;
-let score = 0;
+const setTheme = (mode) => {
+    document.body.classList.toggle("dark", mode === "dark");
+    const icon = themeToggle?.querySelector(".theme-icon");
+    const label = themeToggle?.querySelector(".theme-label");
+    if (icon && label) {
+        icon.textContent = mode === "dark" ? "☀️" : "🌙";
+        label.textContent = mode === "dark" ? "Light" : "Dark";
+    }
+    localStorage.setItem("quizforge-theme", mode);
+};
 
-// DOM Elements
-const questionEl = document.getElementById("question-text");
-const optionsEl = document.getElementById("options-container");
-const nextBtn = document.getElementById("next-btn");
-const progressEl = document.getElementById("progress");
-const quizSection = document.getElementById("quiz");
-const resultSection = document.getElementById("results");
-const scoreEl = document.getElementById("score");
-const totalEl = document.getElementById("total");
-
-// Initialize Quiz
-function loadQuestion() {
-    // Reset UI
-    optionsEl.innerHTML = "";
-    nextBtn.classList.add("hidden");
-
-    // Get current question object from exam_data.js
-    const currentQuizData = examData[currentQuestionIndex];
-
-    // Update Text
-    questionEl.innerText = currentQuizData.question;
-    progressEl.innerText = `Question ${currentQuestionIndex + 1} of ${examData.length}`;
-
-    // Create Buttons for Options
-    currentQuizData.options.forEach(option => {
-        const button = document.createElement("button");
-        button.innerText = option;
-        button.classList.add("option-btn");
-        button.onclick = () => selectAnswer(button, currentQuizData.correct);
-        optionsEl.appendChild(button);
-    });
+const storedTheme = localStorage.getItem("quizforge-theme");
+if (storedTheme) {
+    setTheme(storedTheme);
 }
 
-function selectAnswer(selectedBtn, correctAnswer) {
-    const isCorrect = selectedBtn.innerText === correctAnswer;
+themeToggle?.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("dark") ? "light" : "dark";
+    setTheme(nextTheme);
+});
 
-    if (isCorrect) {
-        selectedBtn.classList.add("correct");
-        score++;
-    } else {
-        selectedBtn.classList.add("wrong");
+const resetOptions = () => {
+    if (!demoOptions) return;
+    demoOptions.querySelectorAll("button").forEach((button) => {
+        button.classList.remove("correct", "wrong");
+        button.disabled = false;
+    });
+};
+
+const renderQuestion = () => {
+    if (!demoQuestion || !demoOptions || !demoExplanation || !demoProgress || !demoDifficulty) {
+        return;
     }
+    const question = window.examData?.[currentIndex];
+    if (!question) {
+        demoQuestion.textContent = "No questions available.";
+        return;
+    }
+    demoQuestion.textContent = question.question;
+    demoExplanation.textContent = "Select an option to reveal the explanation.";
+    demoProgress.textContent = `Question ${currentIndex + 1} of ${window.examData.length}`;
+    demoDifficulty.textContent = question.difficulty ?? "Easy";
+    demoOptions.innerHTML = "";
+    question.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = `${optionLabels[index]}. ${option}`;
+        button.dataset.option = option;
+        demoOptions.appendChild(button);
+    });
+    resetOptions();
+    demoNext?.classList.add("hidden");
+};
 
-    // Disable all buttons after selection so user can't change answer
-    const allOptions = optionsEl.querySelectorAll("button");
-    allOptions.forEach(btn => {
-        btn.disabled = true;
-        // Highlight the correct answer if they got it wrong
-        if (btn.innerText === correctAnswer) {
-            btn.classList.add("correct");
+const revealAnswer = (button) => {
+    if (!demoOptions || !button) return;
+    const question = window.examData?.[currentIndex];
+    if (!question) return;
+    const isCorrect = button.dataset.option === question.correct;
+    button.classList.add(isCorrect ? "correct" : "wrong");
+    demoOptions.querySelectorAll("button").forEach((optionButton) => {
+        optionButton.disabled = true;
+        if (optionButton.dataset.option === question.correct) {
+            optionButton.classList.add("correct");
         }
     });
+    demoExplanation.textContent = question.explanation ?? "Explanation coming soon.";
+    demoNext?.classList.remove("hidden");
+};
 
-    // Show Next Button
-    nextBtn.classList.remove("hidden");
-}
+demoOptions?.addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (!button || button.disabled) return;
+    revealAnswer(button);
+});
 
-nextBtn.addEventListener("click", () => {
-    currentQuestionIndex++;
+demoNext?.addEventListener("click", () => {
+    if (!window.examData?.length) return;
+    currentIndex = (currentIndex + 1) % window.examData.length;
+    renderQuestion();
+});
 
-    if (currentQuestionIndex < examData.length) {
-        loadQuestion();
-    } else {
-        showResults();
+document.addEventListener("keydown", (event) => {
+    const keyMap = { "1": 0, "2": 1, "3": 2, "4": 3 };
+    if (!demoOptions || keyMap[event.key] === undefined) return;
+    const optionButton = demoOptions.querySelectorAll("button")[keyMap[event.key]];
+    if (optionButton) {
+        revealAnswer(optionButton);
     }
 });
 
-function showResults() {
-    quizSection.classList.add("hidden");
-    nextBtn.classList.add("hidden");
-    resultSection.classList.remove("hidden");
-    progressEl.innerText = "Completed";
-
-    scoreEl.innerText = score;
-    totalEl.innerText = examData.length;
+if (window.examData?.length) {
+    renderQuestion();
+} else if (demoQuestion) {
+    demoQuestion.textContent = "No questions loaded.";
 }
-
-// Start the app
-loadQuestion();
-    

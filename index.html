@@ -1,39 +1,273 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam MCQ App</title>
+    <title>QuizForge | Modern MCQ Platform</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="quiz-container">
-        <div class="header">
-            <h1>Final Exam</h1>
-            <span id="progress">Question 1 of 5</span>
-        </div>
-
-        <div id="quiz">
-            <h2 id="question-text">Question text goes here</h2>
-            <div id="options-container" class="options-list">
+    <div class="page">
+        <header class="site-header">
+            <nav class="nav">
+                <div class="brand">
+                    <span class="logo">QF</span>
+                    <div>
+                        <p class="brand-name">QuizForge</p>
+                        <p class="brand-tagline">Modern MCQ platform</p>
+                    </div>
                 </div>
-        </div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#practice">Practice</a>
+                    <a href="#admin">Admin</a>
+                    <a href="#architecture">Architecture</a>
+                </div>
+                <div class="nav-actions">
+                    <button class="ghost" id="theme-toggle" aria-label="Toggle dark mode">
+                        <span class="theme-icon">🌙</span>
+                        <span class="theme-label">Dark</span>
+                    </button>
+                    <button class="primary">Launch Demo</button>
+                </div>
+            </nav>
+        </header>
 
-        <div id="results" class="hidden">
-            <h2>Quiz Completed!</h2>
-            <p>Your Score: <span id="score">0</span> / <span id="total">0</span></p>
-            <button onclick="location.reload()">Restart Quiz</button>
-        </div>
+        <main>
+            <section class="hero">
+                <div class="hero-content">
+                    <p class="pill">Next.js + TypeScript + Tailwind</p>
+                    <h1>Build and scale high-performing MCQ experiences with QuizForge.</h1>
+                    <p class="hero-subtitle">
+                        Mobile-first, analytics-driven, and ready for production. QuizForge unifies practice, mock tests,
+                        and administration in one elegant platform.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="primary">Start Practicing</button>
+                        <button class="secondary">View Admin Demo</button>
+                    </div>
+                    <div class="hero-metrics">
+                        <div>
+                            <h3>50+</h3>
+                            <p>Seed questions</p>
+                        </div>
+                        <div>
+                            <h3>5</h3>
+                            <p>Core categories</p>
+                        </div>
+                        <div>
+                            <h3>3</h3>
+                            <p>Practice modes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <div class="card-header">
+                        <span>Live Practice Demo</span>
+                        <span class="badge" id="demo-difficulty">Easy</span>
+                    </div>
+                    <p class="progress-chip" id="demo-progress">Question 1 of 50</p>
+                    <h2 id="demo-question">Loading practice question…</h2>
+                    <div class="options" id="demo-options"></div>
+                    <div class="explanation" id="demo-explanation"></div>
+                    <div class="demo-actions">
+                        <button class="secondary hidden" id="demo-next">Next Question</button>
+                    </div>
+                    <div class="helper">
+                        <span class="hint">Keyboard shortcuts: 1–4, ⬅️ / ➡️</span>
+                    </div>
+                </div>
+            </section>
 
-        <div class="footer">
-            <button id="next-btn" class="hidden">Next Question</button>
-        </div>
+            <section class="section" id="features">
+                <div class="section-header">
+                    <h2>Core features</h2>
+                    <p>Everything you need to deliver delightful MCQ experiences.</p>
+                </div>
+                <div class="grid-3">
+                    <article>
+                        <h3>User roles</h3>
+                        <p>Guest practice, registered progress tracking, and secure admin access with granular permissions.</p>
+                    </article>
+                    <article>
+                        <h3>MCQ system</h3>
+                        <p>Categories → subcategories → topics → difficulty → tags, with support for LaTeX and images.</p>
+                    </article>
+                    <article>
+                        <h3>Question types</h3>
+                        <p>Single-correct, multi-correct, and true/false questions with explanations.</p>
+                    </article>
+                    <article>
+                        <h3>Search + filters</h3>
+                        <p>Keyword, tag, difficulty, topic, unattempted, and incorrect states in one unified search UI.</p>
+                    </article>
+                    <article>
+                        <h3>Progress UI</h3>
+                        <p>Sticky progress bar, question navigator, and keyboard shortcuts for speed.</p>
+                    </article>
+                    <article>
+                        <h3>Performance</h3>
+                        <p>Smart caching, pagination, lazy loading, and optimized media delivery.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section" id="practice">
+                <div class="section-header">
+                    <h2>Practice modes</h2>
+                    <p>Flexible modes tuned for quick learning or exam-day readiness.</p>
+                </div>
+                <div class="grid-3">
+                    <article>
+                        <h3>Topic Practice</h3>
+                        <p>Instant feedback, explanations, and confidence tracking.</p>
+                    </article>
+                    <article>
+                        <h3>Timed Mock Test</h3>
+                        <p>Fixed duration, randomization, and optional negative marking.</p>
+                    </article>
+                    <article>
+                        <h3>Review Mode</h3>
+                        <p>Revisit wrong answers, flagged items, or bookmarked questions.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section alt">
+                <div class="section-header">
+                    <h2>Analytics dashboard</h2>
+                    <p>Measure accuracy, time spent, streaks, and recommendations across topics.</p>
+                </div>
+                <div class="grid-2">
+                    <div class="stat-card">
+                        <h3>Accuracy by topic</h3>
+                        <p>Spot weak areas instantly and assign targeted practice sessions.</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Time on task</h3>
+                        <p>Track pacing, average response time, and improvement over time.</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Streaks & recommendations</h3>
+                        <p>Boost motivation with streaks and auto-generated next steps.</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Insights export</h3>
+                        <p>Download analytics snapshots for tutors and cohort reporting.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section" id="admin">
+                <div class="section-header">
+                    <h2>Admin panel</h2>
+                    <p>Create, review, and launch MCQs with an editor built for content teams.</p>
+                </div>
+                <div class="grid-2">
+                    <article>
+                        <h3>CRUD + bulk upload</h3>
+                        <p>CSV/Excel ingestion, JSON import/export, and guided review flows.</p>
+                    </article>
+                    <article>
+                        <h3>Rich editor</h3>
+                        <p>LaTeX support, media upload, live preview, and reusable templates.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section" id="architecture">
+                <div class="section-header">
+                    <h2>Architecture snapshot</h2>
+                    <p>Production-ready stack with modular services and clear deployment steps.</p>
+                </div>
+                <div class="stack">
+                    <div>
+                        <h3>Folder structure</h3>
+                        <pre>
+quizforge/
+├─ app/
+│  ├─ (public)/
+│  ├─ admin/
+│  ├─ api/
+│  └─ dashboard/
+├─ components/
+├─ lib/
+├─ prisma/
+├─ public/
+└─ docker/
+                        </pre>
+                    </div>
+                    <div>
+                        <h3>Database schema (Prisma)</h3>
+                        <pre>
+model User { id String @id @default(cuid()) }
+model Category { id String @id @default(cuid()) }
+model Topic { id String @id @default(cuid()) }
+model Question { id String @id @default(cuid()) }
+model Attempt { id String @id @default(cuid()) }
+model Tag { id String @id @default(cuid()) }
+                        </pre>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div>
+                        <h3>Key pages & components</h3>
+                        <ul>
+                            <li>Home, Categories, Topic detail, About, Contact, Privacy, Terms</li>
+                            <li>Practice shell, question card, progress bar, navigator, timer</li>
+                            <li>Admin editor, bulk uploader, media library, analytics dashboard</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>API endpoints</h3>
+                        <ul>
+                            <li>GET /api/questions?topic=&amp;difficulty=&amp;tag=</li>
+                            <li>POST /api/attempts</li>
+                            <li>GET /api/analytics/summary</li>
+                            <li>POST /api/admin/questions/bulk</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="stack">
+                    <div>
+                        <h3>Bulk upload format</h3>
+                        <pre>
+question,optionA,optionB,optionC,optionD,correct,explanation,tags
+"What is JWT?",Token,Session,Cache,Key,A,"JSON Web Token","auth,security"
+                        </pre>
+                    </div>
+                    <div>
+                        <h3>Deployment steps</h3>
+                        <ol>
+                            <li>Configure .env (DATABASE_URL, NEXTAUTH_SECRET, GOOGLE_ID).</li>
+                            <li>Run prisma migrate and seed data (50 questions / 5 categories).</li>
+                            <li>Build Docker image and deploy via container registry.</li>
+                            <li>Enable CDN caching and image optimization.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="site-footer">
+            <div>
+                <h3>QuizForge</h3>
+                <p>Fast, secure, and delightful MCQ training for modern learners.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#features">Features</a>
+                <a href="#practice">Practice</a>
+                <a href="#admin">Admin</a>
+                <a href="#architecture">Docs</a>
+            </div>
+            <p class="copyright">© 2024 QuizForge. All rights reserved.</p>
+        </footer>
     </div>
 
     <script src="exam_data.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
-    
